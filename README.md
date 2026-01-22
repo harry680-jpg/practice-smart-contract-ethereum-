@@ -1,3 +1,34 @@
+## Mapping Practice
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.26;
+
+contract PractisingMapping {
+
+    // declare a State Variable mapping from address to string
+    mapping(address => string) private names;
+
+    // declare a set function to set the value for the state variable
+    function setName (address _addr, string memory _name) public {
+        names[_addr] = _name;
+    }
+
+    // Declare a get function to get the value from the state variable
+    function getName (address _addr) public view returns (string memory) {
+        return names[_addr];
+    }
+
+    // Declare a function to remove the currently defined value
+    function removeName (address _addr) public {
+        delete names[_addr];
+    }
+
+}
+
+```
+
+
 ## First Smart Contract Practice
 
 ```solidity
