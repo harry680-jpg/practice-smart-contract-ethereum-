@@ -1,3 +1,43 @@
+#### Mapping from address to struct with msg.sender and modifier
+``` solidity
+
+// SPDX-License-Identifier: MIT
+pragma solidity  ^0.8.26;
+
+contract  MappingStructPractice2 {
+
+    // Declare a struct for student
+    struct Student {
+        string name;
+        string email;
+        bool isRegistered;
+    }
+
+    // Declare a Mapping from address to struct Student
+    mapping (address => Student) private students;
+
+
+    // Declare a function to set a student registration
+      function setRegistereation (string memory _name, string memory _email) public {
+        require(students[msg.sender].isRegistered == false, "you have registered!!");
+        students[msg.sender] = Student ({
+            name: _name,
+            email: _email,
+            isRegistered: true
+        });
+      }
+// Declare a function for student who registered to see the results 
+function getResults() public view returns (string memory, string memory){
+    require (students[msg.sender].isRegistered == true, "You haven't Registered");
+    return (
+        students[msg.sender].name,
+        students[msg.sender].email);
+}
+  }
+
+```
+
+
 ### Mapping from address to struct
 
 ``` solidity
