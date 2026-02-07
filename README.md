@@ -1,3 +1,73 @@
+##### CCMP606 – PiggyBank Ethereum Smart Contract
+``` solidity
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.26;
+
+contract PiggyBank {
+  address public owner;
+    uint256 public savingGoal;
+    mapping(address => uint256) private deposits;
+
+   // Declare an events for logging activities
+event DepositRecorded(address indexed depoitor, uint256 amount);
+event SavingGoalReached(uint256 totalBalance);
+event BankEmptied(address indexed owner, uint256 amount);
+
+// Declare a Modifier to restricts accesss to owner only
+modifier onlyOwner() {
+    require(msg.sender == owner, "Only owner can perform this action");
+    _;
+
+}
+
+// Declare a Constructor to initialize the contract with an owner and a saving goal
+constructor(uint256 _savingGoal) {
+    owner = msg.sender;
+    savingGoal = _savingGoal;
+}
+// Function to Deposit ETH into the PiggyBank
+function depositToBank() external payable {
+    require(msg.value > 0, "Seposit must be greater than 0");
+
+    // Track Deposits per address
+    deposits[msg.sender] += msg.value;
+
+    // Emit Deposit Event
+    emit DepositRecorded(msg.sender, msg.value);
+
+    // Check if saving goal is reached
+    if (address(this).balance >= savingGoal) {
+        emit SavingGoalReached(address(this).balance);
+
+    }
+}
+
+// Get currunt contract Balance (Wei)
+function getBalance() external view returns (uint256) {
+    return address(this).balance;
+}
+
+// Get total deposits made by a specific address
+function getDepositsValue(address depositor) external view returns (uint256) {
+    return deposits[depositor];
+}
+
+// Withdraw all ETH (only owner & only after goal reahed)
+function emptyTheBank() external onlyOwner {
+    require(address(this).balance >= savingGoal, "Saving goal not reached yet");
+
+    uint256 amount = address(this).balance;
+
+    (bool success, ) = payable(owner).call{value: amount}("");
+    require(success, "ETH transfer failed");
+
+    emit BankEmptied(owner, amount);
+}
+}
+```
+
+
 #### Mapping from address to struct with msg.sender and modifier
 ``` solidity
 
