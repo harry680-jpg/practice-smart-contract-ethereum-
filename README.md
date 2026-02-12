@@ -1,3 +1,58 @@
+#### StructArrayPractice
+``` solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.26;
+
+contract StructArrayPractice {
+
+    // Declare a structure for a student 
+    struct Student {
+        string name ;
+        bool isRegistered;
+    }
+
+    // Declare an array to hold all the students defined
+    Student[] private students;
+
+    // Declare a function as internal to register a student
+    function _registerStudent(string memory _name ) internal {
+        students.push(Student({
+            name: _name,
+            isRegistered: true
+        }));
+    }
+    // Declare a function as external to register a student for external accounts
+    function registerStudent(string calldata _name) external {
+        _registerStudent( _name);
+    }
+
+    
+    // Declare a function to get student information by index
+    function getStudentById (uint256 _index) external view returns (string memory, bool) {
+        return (students[_index].name, students[_index].isRegistered);
+    }
+
+
+    // Declare a function to return all the students registred 
+    function getAllStudents() external view returns (Student[] memory) {
+        return students;
+    }
+
+    // Declare a function to popup the last student 
+    function popUpStudent() external  {
+        students.pop();
+    }
+
+// Declare a function to return the lenght of the student array 
+function getArrayLength() external view returns (uint256) {
+    return students.length;
+}
+
+}
+```
+
+
+
 ##### CCMP606 – PiggyBank Ethereum Smart Contract
 ``` solidity
 
